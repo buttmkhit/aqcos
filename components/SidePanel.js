@@ -133,6 +133,7 @@ export default function SidePanel({
             fontSize: "12px",
             color: "#FCA5A5",
             lineHeight: "1.5",
+            whiteSpace: "pre-line",
           }}
         >
           ⚠️ {error}
