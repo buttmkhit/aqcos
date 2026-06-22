@@ -11,10 +11,10 @@
  */
 
 const FALLBACK_MODELS = [
-  "gemini-3.5-flash",
-  "gemini-3.1-flash-lite",
   "gemini-2.5-flash",
   "gemini-2.5-flash-lite",
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
 ];
 
 const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
@@ -115,7 +115,7 @@ export default async function handler(req, res) {
       // 404 = model tidak ada/tidak didukung -> coba kandidat selanjutnya.
       // 429 = rate limit/quota habis -> coba kandidat selanjutnya juga.
       // Selain itu (400 bad request, 500 server) -> stop, beritahu user.
-      if (response.status !== 404 && response.status !== 429) {
+      if (response.status !== 404 && response.status !== 429 && response.status !== 400) {
         return res.status(response.status).json({
           error: `Gemini API error: ${response.status}`,
           detail: errText,
