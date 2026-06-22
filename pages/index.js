@@ -58,13 +58,29 @@ export default function Home() {
         const errData = await res.json().catch(() => ({}));
         let msg = errData.error || `Server error ${res.status}`;
 
-        // Tampilkan ringkasan percobaan tiap model, kalau ada, supaya
-        // penyebab sebenarnya kelihatan (bukan cuma "404" polos).
+        // Tampilkan ringkasan percobaan tiap model BESERTA pesan asli dari
+        // Google (field "detail"), supaya penyebab sebenarnya kelihatan
+        // langsung di layar tanpa perlu buka DevTools.
         if (Array.isArray(errData.attempts) && errData.attempts.length > 0) {
           const ringkasan = errData.attempts
-            .map((a) => `${a.model}: ${a.status || a.error}`)
-            .join(" | ");
-          msg += `\nDetail percobaan: ${ringkasan}`;
+            .map((a) => {
+              const statusOrErr = a.status || a.error || "?";
+              let detailSingkat = "";
+              if (a.detail) {
+                // Coba ambil pesan "message" dari JSON error Google kalau ada.
+                try {
+                  const parsedDetail = JSON.parse(a.detail);
+                  detailSingkat =
+                    parsedDetail?.error?.message || a.detail;
+                } catch {
+                  detailSingkat = a.detail;
+                }
+                detailSingkat = " — " + detailSingkat.slice(0, 200);
+              }
+              return `${a.model}: ${statusOrErr}${detailSingkat}`;
+            })
+            .join("\n");
+          msg += `\n\nDetail percobaan:\n${ringkasan}`;
         }
         throw new Error(msg);
       }
