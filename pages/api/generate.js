@@ -1,4 +1,4 @@
-const GEMINI_MODEL = "gemini-1.5-flash";
+const GEMINI_MODEL = "gemini-3.5-flash";
 const MAX_RETRY = 3;
 const RETRY_DELAY_MS = 2000;
 
