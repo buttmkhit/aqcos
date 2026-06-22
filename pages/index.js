@@ -56,7 +56,17 @@ export default function Home() {
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `Server error ${res.status}`);
+        let msg = errData.error || `Server error ${res.status}`;
+
+        // Tampilkan ringkasan percobaan tiap model, kalau ada, supaya
+        // penyebab sebenarnya kelihatan (bukan cuma "404" polos).
+        if (Array.isArray(errData.attempts) && errData.attempts.length > 0) {
+          const ringkasan = errData.attempts
+            .map((a) => `${a.model}: ${a.status || a.error}`)
+            .join(" | ");
+          msg += `\nDetail percobaan: ${ringkasan}`;
+        }
+        throw new Error(msg);
       }
 
       const data = await res.json();
