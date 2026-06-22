@@ -20,10 +20,13 @@ const FALLBACK_MODELS = [
 const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
 
 async function callGemini(model, apiKey, geminiBody) {
-  const url = `${API_BASE}/models/${model}:generateContent?key=${apiKey}`;
+  const url = `${API_BASE}/models/${model}:generateContent`;
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey,
+    },
     body: JSON.stringify(geminiBody),
   });
   return response;
@@ -31,7 +34,9 @@ async function callGemini(model, apiKey, geminiBody) {
 
 async function findWorkingModel(apiKey) {
   // Tanya langsung ke Google: model apa saja yang valid untuk key ini.
-  const res = await fetch(`${API_BASE}/models?key=${apiKey}`);
+  const res = await fetch(`${API_BASE}/models`, {
+  headers: { "x-goog-api-key": apiKey },
+});
   if (!res.ok) return null;
   const data = await res.json();
   const models = data?.models || [];
