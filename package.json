@@ -1,0 +1,23 @@
+{
+  "name": "aqcos",
+  "version": "2.0.0",
+  "description": "AI Quarantine Content Operating System",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^13.5.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "babel-loader": "^10.1.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5"
+  }
+}
